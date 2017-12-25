@@ -40,7 +40,7 @@ class UserQuery(Resource):
     def get(self, userid):
         authuser = models.User.query.filter_by(id=userid).first()
         if authuser:
-            return {'username': authuser.username, 'id': authuser.id}
+            return {'username': authuser.username, 'id': authuser.id, 'first_name': authuser.first_name, 'last_name': authuser.last_name, 'email': authuser.email}
         else:
             return {'error': 'Invalid user id.'}
 
@@ -72,7 +72,7 @@ class Message(Resource):
 class DefaultPage(Resource):
 
     def get(self):
-        return {'status':'this test works','update':'this page was updated'}
+        return {'status':'this test works','update':'this page was updated','another_update':'christmas eve'}
 
 api.add_resource(Users,'/user')
 api.add_resource(UserQuery,'/user/<userid>')
