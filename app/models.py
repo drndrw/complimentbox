@@ -77,7 +77,7 @@ class MessagesRecipients(db.Model):
         self.id = id
         self.read = read
 
-Populate database with tables. NOT FOR PRODUCTION ENVIRONMENT
+# Populate database with tables. NOT FOR PRODUCTION ENVIRONMENT
 @app.route('/create')
 def create_tables():
     try:
