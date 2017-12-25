@@ -44,44 +44,44 @@ class User(db.Model):
         except:
             return {'status': False, 'failed': 'Invalid username.'}
 
-# class Messages(db.Model):
-#     __tablename__ = 'messages'
-#
-#     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-#     sender = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-#     title = db.Column(db.String(255))
-#     body = db.Column(db.UnicodeText, nullable=False)
-#     time = db.Column(db.Time, nullable=False)
-#     date = db.Column(db.Date, nullable=False)
-#     messages_messagesrecipients = db.relationship('MessagesRecipients')
-#
-#     def __init__(self, sender, title, body, id=None, time=datetime.datetime.now().time(), date=datetime.datetime.now().date()):
-#         self.sender = sender
-#         self.title = title
-#         self.body = body
-#         self.id = id
-#         self.time = time
-#         self.date = date
-#
-# class MessagesRecipients(db.Model):
-#     __tablename__ = 'messages_recipients'
-#
-#     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-#     message_id = db.Column(db.Integer, db.ForeignKey('messages.id'), nullable=False)
-#     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-#     read = db.Column(db.Boolean, nullable=False)
-#
-#     def __init__(self, message_id, user_id, id=None, read=False):
-#         self.message_id = message_id
-#         self.user_id = user_id
-#         self.id = id
-#         self.read = read
+class Messages(db.Model):
+    __tablename__ = 'messages'
 
-#Populate database with tables. NOT FOR PRODUCTION ENVIRONMENT
-# @app.route('/create')
-# def create_tables():
-#     try:
-#         db.create_all()
-#         return jsonify({'status':'Tables have been created.'})
-#     except Exception as e:
-#         return jsonify({'error':str(e)})
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    sender = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    message_type = db.Column(db.String(255))
+    message = db.Column(db.UnicodeText, nullable=False)
+    time = db.Column(db.Time, nullable=False)
+    date = db.Column(db.Date, nullable=False)
+    messages_messagesrecipients = db.relationship('MessagesRecipients')
+
+    def __init__(self, sender, title, body, id=None, time=datetime.datetime.now().time(), date=datetime.datetime.now().date()):
+        self.sender = sender
+        self.title = title
+        self.body = body
+        self.id = id
+        self.time = time
+        self.date = date
+
+class MessagesRecipients(db.Model):
+    __tablename__ = 'messages_recipients'
+
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    message_id = db.Column(db.Integer, db.ForeignKey('messages.id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    read = db.Column(db.Boolean, nullable=False)
+
+    def __init__(self, message_id, user_id, id=None, read=False):
+        self.message_id = message_id
+        self.user_id = user_id
+        self.id = id
+        self.read = read
+
+Populate database with tables. NOT FOR PRODUCTION ENVIRONMENT
+@app.route('/create')
+def create_tables():
+    try:
+        db.create_all()
+        return jsonify({'status':'Tables have been created.'})
+    except Exception as e:
+        return jsonify({'error':str(e)})

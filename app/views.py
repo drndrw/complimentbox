@@ -72,7 +72,7 @@ class Message(Resource):
 class DefaultPage(Resource):
 
     def get(self):
-        return {'status':'this test works','update':'this page was updated','another_update':'christmas eve'}
+        return {'status':'this test works','update':'this page was updated','another_update':'christmas day'}
 
 api.add_resource(Users,'/user')
 api.add_resource(UserQuery,'/user/<userid>')
