@@ -78,10 +78,10 @@ class MessagesRecipients(db.Model):
         self.read = read
 
 # Populate database with tables. NOT FOR PRODUCTION ENVIRONMENT
-@app.route('/create')
-def create_tables():
-    try:
-        db.create_all()
-        return jsonify({'status':'Tables have been created.'})
-    except Exception as e:
-        return jsonify({'error':str(e)})
+# @app.route('/create')
+# def create_tables():
+#     try:
+#         db.create_all()
+#         return jsonify({'status':'Tables have been created.'})
+#     except Exception as e:
+#         return jsonify({'error':str(e)})
