@@ -10,7 +10,7 @@ from v1 import api, app, db, models
 class DefaultPage(Resource):
 
     def get(self):
-        return {'API v1.0':'http://api.complimentbox.com/v1'}
+        return {'v1.0':'http://api.complimentbox.com/v1'}
 
 api.add_resource(DefaultPage,'/')
 
