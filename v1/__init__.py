@@ -3,7 +3,7 @@ from flask import Flask, jsonify
 app = Flask(__name__)
 
 #CONFIGURATION SETTINGS
-app.config.from_object('app.config.dev_config')
+app.config.from_object('v1.config.dev_config')
 
 #API SETTINGS
 from flask_restful import Resource, Api

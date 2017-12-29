@@ -1,4 +1,4 @@
-from v1 import v1 as application
+from v1 import app as application
 from flask import Flask, jsonify
 
 # application = Flask(__name__)

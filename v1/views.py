@@ -3,10 +3,20 @@ from flask_restful import Resource, Api
 from flask_jwt import JWT, jwt_required, current_identity
 from v1 import api, app, db, models
 
+########################
+##### LANDING PAGE #####
+########################
 
-# @app.route('/')
-# def apptest():
-#     return jsonify({'test':'hey'})
+class DefaultPage(Resource):
+
+    def get(self):
+        return {'ap_v1':'http://api.complimentbox.com/v1'}
+
+api.add_resource(DefaultPage,'/')
+
+#########################
+##### API VERSION 1 #####
+#########################
 
 class Users(Resource):
 
@@ -69,12 +79,6 @@ class Message(Resource):
         else:
             return {'error':'Please enter all required fields.'}
 
-class DefaultPage(Resource):
-
-    def get(self):
-        return {'status':'this test works','update':'this page was updated','another_update':'christmas day'}
-
-api.add_resource(Users,'/user')
-api.add_resource(UserQuery,'/user/<userid>')
-api.add_resource(Message,'/messages')
-api.add_resource(DefaultPage,'/')
+api.add_resource(Users,'/v1/user')
+api.add_resource(UserQuery,'/v1/user/<userid>')
+api.add_resource(Message,'/v1/messages')
