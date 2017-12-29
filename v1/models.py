@@ -1,4 +1,4 @@
-from app import app, bcrypt, db
+from v1 import app, bcrypt, db
 from flask import jsonify
 import datetime
 import string

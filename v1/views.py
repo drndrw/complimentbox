@@ -1,7 +1,7 @@
 from flask import jsonify, request
 from flask_restful import Resource, Api
 from flask_jwt import JWT, jwt_required, current_identity
-from app import api, app, db, models
+from v1 import api, app, db, models
 
 
 # @app.route('/')

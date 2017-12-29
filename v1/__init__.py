@@ -17,7 +17,7 @@ db = SQLAlchemy(app)
 from flask.ext.bcrypt import Bcrypt
 bcrypt = Bcrypt(app)
 
-from app import views, models
+from v1 import views, models
 
 #JWT SETTINGS
 from flask_jwt import JWT, jwt_required, current_identity
