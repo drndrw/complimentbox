@@ -22,11 +22,13 @@ from v1 import views, models
 #JWT SETTINGS
 from flask_jwt import JWT, jwt_required, current_identity
 
+#Creates authorization endpoint at /v1/user/auth
 def authenticate(username, password):
     authuser = models.User.validate(username, password)
     if authuser['status'] is True:
         return authuser['user']
 
+#Used for current_identity variable
 def identity(payload):
     user_id = payload['identity']
     return user_id
