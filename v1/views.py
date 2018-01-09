@@ -2,7 +2,7 @@ from flask import jsonify, request
 from flask_restful import Resource, Api
 from flask_jwt import JWT, jwt_required, current_identity
 from v1 import api, app, db, models
-from v1.oauth import auth #Google implicit Oauth2
+# from v1.oauth import auth #Google implicit Oauth2
 
 ########################
 ##### LANDING PAGE #####
@@ -83,4 +83,4 @@ class Message(Resource):
 api.add_resource(Users,'/v1/user')
 api.add_resource(UserQuery,'/v1/user/<userid>')
 api.add_resource(Message,'/v1/messages')
-api.add_resource(auth.Oauth,'/v1/oauth') #Google auth URL
+# api.add_resource(auth.Oauth,'/v1/oauth') #Google auth URL
