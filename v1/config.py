@@ -18,3 +18,6 @@ class dev_config(config):
 
     #Flask JWT configuration
     JWT_AUTH_URL_RULE = os.getenv('JWT_AUTH_URL_RULE','/v1/user/auth') #Change default
+
+    #Oauth configuration
+    GOOGLE_PROJECT_ID = os.getenv('GOOGLE_PROJECT_ID','000000000000')
