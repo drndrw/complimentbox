@@ -18,6 +18,7 @@ from flask.ext.bcrypt import Bcrypt
 bcrypt = Bcrypt(app)
 
 from v1 import views, models
+from v1.oauth import auth
 
 #JWT SETTINGS
 from flask_jwt import JWT, jwt_required, current_identity
