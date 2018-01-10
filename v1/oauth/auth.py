@@ -28,20 +28,33 @@ https://developers.google.com/actions/identity/oauth2-implicit-flow
 @app.route('/v1/oauth')
 def implicit_auth():
     client_keys = {'google':'Google'} #Validate client ID (eg. Google, Amazon, etc.)
+    missing_args = [] #A list of missing URL arguments (returned to template)
 
     #URL arguments to parse
-    client_id = request.args.get('client_id') #Client ID (eg. google)
-    redirect_uri = request.args.get('redirect_uri') #Redirect URI (client side)
-    state = request.args.get('state') #Bookkeeping value; returned unchanged w/ redirect URI
-    response_type = request.args.get('response_type') #Response type should be 'token'
+    #Client ID (eg. google)
+    client_id = request.args.get('client_id') if request.args.get('client_id') in client_keys else missing_args.append('client_id')
+    #Redirect URI (client side)
+    redirect_uri = request.args.get('redirect_uri') if request.args.get('redirect_uri') == \
+        '{}{}'.format(config.dev_config.GOOGLE_REDIRECT_URI,config.dev_config.GOOGLE_PROJECT_ID)  \
+        else missing_args.append('redirect_uri')
+    #Bookkeeping value; returned unchanged w/ redirect URI
+    state = request.args.get('state') if request.args.get('state') else missing_args.append('state')
+    #Response type should be 'token'
+    response_type = request.args.get('response_type') if request.args.get('response_type') == 'token' \
+        else missing_args.append('response_type')
 
+    if len(missing_args) > 0:
+        return ' '.join(missing_args)
+    else:
+        return 'Passed all checks. Enable user login.'
     #Verify client ID
-    if client_id in client_keys:
-        print('PASSED CLIENT ID: {}'.format(client_id))
-        if redirect_uri == '{}{}'.format(config.dev_config.GOOGLE_PROJECT_ID,config.dev_config.GOOGLE_RECIRECT_URI):
-            print('PASSED REDIRECT URL: {}'.format(redirect_uri))
-            if response_type == 'token':
-                print('PASSED RESPONSE TYPE: {}'.format(response_type))
-                return "Passed all checks. Enable user login."
+    # if client_id in client_keys:
+    #     print('PASSED CLIENT ID: {}'.format(client_id))
+    #     if redirect_uri == '{}{}'.format(config.dev_config.GOOGLE_REDIRECT_URI,config.dev_config.GOOGLE_PROJECT_ID):
+    #         print('PASSED REDIRECT URL: {}'.format(redirect_uri))
+    #         if response_type == 'token':
+    #             print('PASSED RESPONSE TYPE: {}'.format(response_type))
+    #             return "Passed all checks. Enable user login."
+
     print(config.dev_config.GOOGLE_PROJECT_ID)
     return "Checks failed. Do not permit user to login"
