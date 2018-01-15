@@ -20,7 +20,7 @@ class User(db.Model):
     # user_messages = db.relationship('Messages')
     # user_recipients = db.relationship('MessagesRecipients')
 
-    def __init__(self, username, password, email, first_name, last_name, permission=1, id=None, google_enabled=False, google_token=None, length=10):
+    def __init__(self, username, password, email, first_name, last_name, permission=1, id=None):
         self.username = username
         self.password = bcrypt.generate_password_hash(password)
         self.email = email
@@ -28,9 +28,6 @@ class User(db.Model):
         self.last_name = last_name
         self.permission = permission
         self.id = id
-        self.google_access_string = ''.join([random.choice(string.ascii_lowercase + string.digits) for x in range(length)])
-        self.google_enabled = google_enabled
-        self.google_token = google_token
 
     @staticmethod
     def validate(username, password):
