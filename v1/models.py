@@ -14,9 +14,6 @@ class User(db.Model):
     first_name = db.Column(db.String(255), nullable=False)
     last_name = db.Column(db.String(255), nullable=False)
     permission = db.Column(db.SmallInteger, nullable=False)
-    google_access_string = db.Column(db.String(255), unique=True, nullable=False)
-    google_enabled = db.Column(db.Boolean, nullable=False)
-    google_token = db.Column(db.String(255))
     # user_messages = db.relationship('Messages')
     # user_recipients = db.relationship('MessagesRecipients')
 
@@ -40,6 +37,20 @@ class User(db.Model):
                 return {'status': False, 'failed': 'Invalid password.'}
         except:
             return {'status': False, 'failed': 'Invalid username.'}
+
+class Authorization(db.Model):
+    __tablename__ = 'user_authorization'
+
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    access_token = db.Column(db.String(255), nullable=False, unique=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    cliend_id = db.Column(db.String(255), nullable=False)
+
+    def __init__(self, access_token, user_id, client_id, id=None):
+        self.id = id
+        self.access_token = access_token
+        self.user_id = user_id
+        self.client_id = client_id
 
 class Messages(db.Model):
     __tablename__ = 'messages'
@@ -75,10 +86,10 @@ class MessagesRecipients(db.Model):
         self.read = read
 
 # Populate database with tables. NOT FOR PRODUCTION ENVIRONMENT
-# @app.route('/create')
-# def create_tables():
-#     try:
-#         db.create_all()
-#         return jsonify({'status':'Tables have been created.'})
-#     except Exception as e:
-#         return jsonify({'error':str(e)})
+@app.route('/create')
+def create_tables():
+    try:
+        db.create_all()
+        return jsonify({'status':'Tables have been created.'})
+    except Exception as e:
+        return jsonify({'error':str(e)})
