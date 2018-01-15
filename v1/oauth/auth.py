@@ -1,7 +1,7 @@
 # from flask_restful import Resource, Api, reqparse
 import os
 from v1 import app, config
-from flask import request
+from flask import request, render_template
 from v1.oauth.classes import append_missing
 
 '''
@@ -16,7 +16,7 @@ More information at:
 https://developers.google.com/actions/identity/oauth2-implicit-flow
 '''
 
-@app.route('/v1/oauth')
+@app.route('/v1/oauth', methods=['GET','POST'])
 def implicit_auth():
     client_keys = {'google':'Google'} #Validate client ID (eg. Google, Amazon, etc.)
     missing_args = [] #A list of missing URL arguments (returned to template)
@@ -48,6 +48,7 @@ def implicit_auth():
             return req
 
     if len(missing.missing_args) > 0:
-        return ' '.join(missing.missing_args)
+        # return ' '.join(missing.missing_args)
+        return render_template('auth.html', data={'status':False, 'missing_parameters': missing.missing_args})
     else:
-        return str(missing.available_args)
+        return render_template('auth.html', data={'status':True,'service':missing.available_args['client_id']})
