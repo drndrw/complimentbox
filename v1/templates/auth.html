@@ -1,0 +1,38 @@
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+  <div class="container">
+    {% if data.service %}
+    <div class="row">
+      <div class="col-sm-12">
+        <h1 class="text-center">Sign into {{ data.service }}.</h1>
+    </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-8">
+        <p class="align-middle">Sign into {{ data.service }} using your Compliment Box login.</p>
+      </div>
+      <div class="col-sm-4">
+        <div class="form-group">
+          <label>Username:</label>
+          <input class="form-control" id="usrname">
+        </div>
+        <div class="form-group">
+          <label>Password:</label>
+          <input type="password" class="form-control" id="usrname">
+        </div>
+        <button type="button" action="submit" class="btn btn-primary center">Login</button>
+      </div>
+    </div>
+    {% else %}
+    <div class="row">
+      <div class="col-sm-12">
+        <h1 class="text-center">Missing parameters.</h1>
+    </div>
+    {% endif %}
+  </div>
+</body>
+</html>
