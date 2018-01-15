@@ -48,7 +48,7 @@ def implicit_auth():
             return req
 
     if len(missing.missing_args) > 0:
-        # return ' '.join(missing.missing_args)
+        print(missing.missing_args)
         return render_template('auth.html', data={'status':False, 'missing_parameters': missing.missing_args})
     else:
-        return render_template('auth.html', data={'status':True,'service':missing.available_args['client_id']})
+        return render_template('auth.html', data={'status':True,'service':client_keys[missing.available_args['client_id']]})
