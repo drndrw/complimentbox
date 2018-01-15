@@ -14,10 +14,12 @@ class User(db.Model):
     first_name = db.Column(db.String(255), nullable=False)
     last_name = db.Column(db.String(255), nullable=False)
     permission = db.Column(db.SmallInteger, nullable=False)
+    time_created = db.Column(db.Time, nullable=False)
+    date_created = db.Column(db.Date, nullable=False)
     # user_messages = db.relationship('Messages')
     # user_recipients = db.relationship('MessagesRecipients')
 
-    def __init__(self, username, password, email, first_name, last_name, permission=1, id=None):
+    def __init__(self, username, password, email, first_name, last_name, permission=1, id=None, time=datetime.datetime.now().time(), date=datetime.datetime.now().date()):
         self.username = username
         self.password = bcrypt.generate_password_hash(password)
         self.email = email
@@ -25,6 +27,8 @@ class User(db.Model):
         self.last_name = last_name
         self.permission = permission
         self.id = id
+        self.time_created = db.Column(db.Time, nullable=False)
+        self.date_created = db.Column(db.Date, nullable=False)
 
     @staticmethod
     def validate(username, password):
@@ -45,12 +49,16 @@ class Authorization(db.Model):
     access_token = db.Column(db.String(255), nullable=False, unique=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     cliend_id = db.Column(db.String(255), nullable=False)
+    time_created = db.Column(db.Time, nullable=False)
+    date_created = db.Column(db.Date, nullable=False)
 
-    def __init__(self, access_token, user_id, client_id, id=None):
+    def __init__(self, access_token, user_id, client_id, id=None, time=datetime.datetime.now().time(), date=datetime.datetime.now().date()):
         self.id = id
         self.access_token = access_token
         self.user_id = user_id
         self.client_id = client_id
+        self.time_created = time
+        self.date_created = date
 
 class Messages(db.Model):
     __tablename__ = 'messages'
@@ -59,8 +67,8 @@ class Messages(db.Model):
     sender = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     message_type = db.Column(db.String(255))
     message = db.Column(db.UnicodeText, nullable=False)
-    time = db.Column(db.Time, nullable=False)
-    date = db.Column(db.Date, nullable=False)
+    time_created = db.Column(db.Time, nullable=False)
+    date_created = db.Column(db.Date, nullable=False)
     messages_messagesrecipients = db.relationship('MessagesRecipients')
 
     def __init__(self, sender, title, body, id=None, time=datetime.datetime.now().time(), date=datetime.datetime.now().date()):
@@ -68,8 +76,8 @@ class Messages(db.Model):
         self.title = title
         self.body = body
         self.id = id
-        self.time = time
-        self.date = date
+        self.time_created = time
+        self.date_created = date
 
 class MessagesRecipients(db.Model):
     __tablename__ = 'messages_recipients'
