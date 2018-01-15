@@ -1,6 +1,6 @@
 # from flask_restful import Resource, Api, reqparse
 import os
-from v1 import app, config
+from v1 import app, config, models
 from flask import request, render_template
 from v1.oauth.classes import append_missing
 
@@ -18,37 +18,42 @@ https://developers.google.com/actions/identity/oauth2-implicit-flow
 
 @app.route('/v1/oauth', methods=['GET','POST'])
 def implicit_auth():
-    client_keys = {'google':'Google'} #Validate client ID (eg. Google, Amazon, etc.)
-    missing_args = [] #A list of missing URL arguments (returned to template)
+    if request.method == 'GET':
+        client_keys = {'google':'Google'} #Validate client ID (eg. Google, Amazon, etc.)
+        missing_args = [] #A list of missing URL arguments (returned to template)
+        authorize_post = False #Must be True to permit POST request from this method
 
-    missing = append_missing()
+        missing = append_missing()
 
-    #Client ID (eg. google)
-    @missing.confirm()
-    def client_id(req):
-        if req in client_keys:
-            return req
+        #Client ID (eg. google)
+        @missing.confirm()
+        def client_id(req):
+            if req in client_keys:
+                return req
 
-    #Redirect URI (client side)
-    @missing.confirm()
-    def redirect_uri(req):
-        if req == '{}{}'.format(config.dev_config.GOOGLE_REDIRECT_URI,config.dev_config.GOOGLE_PROJECT_ID):
-            return req
+        #Redirect URI (client side)
+        @missing.confirm()
+        def redirect_uri(req):
+            if req == '{}{}'.format(config.dev_config.GOOGLE_REDIRECT_URI,config.dev_config.GOOGLE_PROJECT_ID):
+                return req
 
-    #Bookkeeping value; returned unchanged w/ redirect URI
-    @missing.confirm()
-    def state(req):
-        if req:
-            return req
+        #Bookkeeping value; returned unchanged w/ redirect URI
+        @missing.confirm()
+        def state(req):
+            if req:
+                return req
 
-    #Response type should be 'token'
-    @missing.confirm()
-    def response_type(req):
-        if req == 'token':
-            return req
+        #Response type should be 'token'
+        @missing.confirm()
+        def response_type(req):
+            if req == 'token':
+                return req
 
-    if len(missing.missing_args) > 0:
-        print(missing.missing_args)
-        return render_template('auth.html', data={'status':False, 'missing_parameters': missing.missing_args})
-    else:
-        return render_template('auth.html', data={'status':True,'service':client_keys[missing.available_args['client_id']]})
+        if len(missing.missing_args) > 0:
+            authorize_post = True
+            return render_template('auth.html', data={'status':False, 'missing_parameters': missing.missing_args})
+        else:
+            return render_template('auth.html', data={'status':True,'service':client_keys[missing.available_args['client_id']]})
+
+    if request.method == 'POST':
+        data = request.get_json()
