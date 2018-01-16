@@ -1,7 +1,15 @@
 <html>
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
   <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+  <script>
+    $(document).ready(function() {
+      $( "#loginbutton" ).on( "click", function() {
+        alert( "Handler for .submit() called." );
+      });
+    });
+  </script>
 </head>
 <body>
   <div class="container">
@@ -18,13 +26,13 @@
       <div class="col-sm-4">
         <div class="form-group">
           <label>Username:</label>
-          <input class="form-control" id="usrname">
+          <input class="form-control" id="username">
         </div>
         <div class="form-group">
           <label>Password:</label>
-          <input type="password" class="form-control" id="usrname">
+          <input type="password" class="form-control" id="password">
         </div>
-        <button type="button" action="submit" class="btn btn-primary center">Login</button>
+        <button id="loginbutton" type="button" action="submit" class="btn btn-primary center">Login</button>
       </div>
     </div>
     {% else %}
