@@ -1,6 +1,5 @@
 from flask import request
 from v1 import models
-from cryptography.fernet import Fernet
 import secrets
 
 #Decorator will add arg to missing_args if conditions aren't met
