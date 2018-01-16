@@ -1,4 +1,7 @@
 from flask import request
+from v1 import models
+from cryptography.fernet import Fernet
+import secrets
 
 #Decorator will add arg to missing_args if conditions aren't met
 class append_missing():
@@ -13,3 +16,12 @@ class append_missing():
             else:
                 self.missing_args.append(f.__name__)
         return wrapper
+
+#Authenticate user and generate access token
+class authorize_user_token():
+
+    def __init__(self, username, password):
+        self.user = models.User.validate(username, password)
+
+    def create_token(self):
+        return token_urlsafe(16)
