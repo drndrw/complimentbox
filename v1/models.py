@@ -49,14 +49,16 @@ class Authorization(db.Model):
     access_token = db.Column(db.String(255), nullable=False, unique=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     cliend_id = db.Column(db.String(255), nullable=False)
+    grant_access = db.Column(db.Boolean, nullable=False)
     time_created = db.Column(db.Time, nullable=False)
     date_created = db.Column(db.Date, nullable=False)
 
-    def __init__(self, access_token, user_id, client_id, id=None, time=datetime.datetime.now().time(), date=datetime.datetime.now().date()):
+    def __init__(self, access_token, user_id, client_id, id=None, time=datetime.datetime.now().time(), date=datetime.datetime.now().date(), grant_access=True):
         self.id = id
-        self.access_token = access_token
+        self.access_token = bcrypt.generate_password_hash(access_token)
         self.user_id = user_id
         self.client_id = client_id
+        self.grant_access = grant_access
         self.time_created = time
         self.date_created = date
 
