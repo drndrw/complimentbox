@@ -23,4 +23,4 @@ class authorize_user_token():
         self.user = models.User.validate(username, password)
 
     def create_token(self):
-        return token_urlsafe(16)
+        return secrets.token_urlsafe(16)
