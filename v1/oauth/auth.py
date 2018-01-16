@@ -57,3 +57,5 @@ def implicit_auth():
 
     if request.method == 'POST':
         data = request.get_json()
+        user = authorize_user_token(data.username, data.password)
+        print(user.create_token())
