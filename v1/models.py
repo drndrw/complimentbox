@@ -27,8 +27,8 @@ class User(db.Model):
         self.last_name = last_name
         self.permission = permission
         self.id = id
-        self.time_created = db.Column(db.Time, nullable=False)
-        self.date_created = db.Column(db.Date, nullable=False)
+        self.time_created = time
+        self.date_created = date
 
     @staticmethod
     def validate(username, password):
