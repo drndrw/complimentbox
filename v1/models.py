@@ -44,6 +44,7 @@ class User(db.Model):
 
 class Authorization(db.Model):
     __tablename__ = 'user_authorization'
+    __table_args__ = (db.UniqueConstraint('user_id','client_id'),) #Ensures user doesn't have multiple tokens for same service
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     access_token = db.Column(db.String(255), nullable=False, unique=True)
@@ -52,6 +53,7 @@ class Authorization(db.Model):
     grant_access = db.Column(db.Boolean, nullable=False)
     time_created = db.Column(db.Time, nullable=False)
     date_created = db.Column(db.Date, nullable=False)
+    # db.UniqueConstraint('user_id','client_id', name='auth_1') #Ensures user doesn't have multiple tokens for same service
 
     def __init__(self, access_token, user_id, client_id, id=None, time=datetime.datetime.now().time(), date=datetime.datetime.now().date(), grant_access=True):
         self.id = id
