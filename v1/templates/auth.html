@@ -6,7 +6,24 @@
   <script>
     $(document).ready(function() {
       $( "#loginbutton" ).on( "click", function() {
-        alert( "Handler for .submit() called." );
+        var payload = {
+          username: $('#username').val(),
+          password: $('#password').val(),
+          state: '{{ data.state }}'
+        }
+        $.ajax({
+          url: '/v1/oauth',
+          type: 'post',
+          contentType:'application/json',
+          data: JSON.stringify(payload),
+        }).done(function (data) {
+          if (data.status == true) {
+            window.location.replace(data.payload);
+          }
+          else {
+            $('#loginbutton').after('<div class="alert alert-danger">Invalid username or password.</div>');
+          }
+        })
       });
     });
   </script>
