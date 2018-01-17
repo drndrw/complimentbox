@@ -48,7 +48,7 @@ class Authorization(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     access_token = db.Column(db.String(255), nullable=False, unique=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    cliend_id = db.Column(db.String(255), nullable=False)
+    client_id = db.Column(db.String(255), nullable=False)
     grant_access = db.Column(db.Boolean, nullable=False)
     time_created = db.Column(db.Time, nullable=False)
     date_created = db.Column(db.Date, nullable=False)
