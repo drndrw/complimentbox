@@ -1,8 +1,8 @@
 # from flask_restful import Resource, Api, reqparse
 import os
 from v1 import app, config, models
-from flask import request, render_template
-from v1.oauth.classes import append_missing
+from flask import request, render_template, jsonify
+from v1.oauth.classes import append_missing, authorize_user_token
 
 '''
 TEMPORARY UNTIL REACT FRONTEND IS DEVELOPED
@@ -53,9 +53,15 @@ def implicit_auth():
             authorize_post = True
             return render_template('auth.html', data={'status':False, 'missing_parameters': missing.missing_args})
         else:
-            return render_template('auth.html', data={'status':True,'service':client_keys[missing.available_args['client_id']]})
+            return render_template('auth.html', data={'status':True,'service':client_keys[missing.available_args['client_id']], 'state': missing.available_args['state']})
 
     if request.method == 'POST':
         data = request.get_json()
-        user = authorize_user_token(data.username, data.password)
-        print(user.create_token())
+        print(data)
+        user = authorize_user_token(data['username'], data['password'])
+        token = user.create_token()
+        if token:
+            return jsonify({'status':True,'payload':'{}{}#access_token={}&token_type=bearer&state={}'.format( \
+            config.dev_config.GOOGLE_REDIRECT_URI,config.dev_config.GOOGLE_PROJECT_ID,token,data['state'])})
+        else:
+            return jsonify({'status':False})
