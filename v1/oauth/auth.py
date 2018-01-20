@@ -59,7 +59,7 @@ def implicit_auth():
         data = request.get_json()
         print(data)
         user = authorize_user_token(data['username'], data['password'])
-        token = user.create_token()
+        token = user.create_token(data['service'])
         if token:
             return jsonify({'status':True,'payload':'{}{}#access_token={}&token_type=bearer&state={}'.format( \
             config.dev_config.GOOGLE_REDIRECT_URI,config.dev_config.GOOGLE_PROJECT_ID,token,data['state'])})
