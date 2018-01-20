@@ -9,7 +9,8 @@
         var payload = {
           username: $('#username').val(),
           password: $('#password').val(),
-          state: '{{ data.state }}'
+          state: '{{ data.state }}',
+          service: '{{ data.service }}'
         }
         $.ajax({
           url: '/v1/oauth',
