@@ -68,6 +68,6 @@ def implicit_auth():
         if token:
             # return jsonify({'status':True,'payload':'{}{}#access_token={}&token_type=bearer&state={}'.format( \
             # config.dev_config.GOOGLE_REDIRECT_URI,config.dev_config.GOOGLE_PROJECT_ID,token,data['state'])})
-            return jsonify({'status': True, 'payload': '{}#access_token={}'.format(urllib.unquote(config.dev_config.GOOGLE_REDIRECT_URI),token)})
+            return jsonify({'status': True, 'payload': '{}#access_token={}'.format(urllib.request.unquote(config.dev_config.GOOGLE_REDIRECT_URI),token)})
         else:
             return jsonify({'status':False})
