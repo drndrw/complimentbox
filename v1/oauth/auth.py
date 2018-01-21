@@ -35,7 +35,8 @@ def implicit_auth():
         @missing.confirm()
         def redirect_uri(req):
             # if req == '{}{}'.format(config.dev_config.GOOGLE_REDIRECT_URI,config.dev_config.GOOGLE_PROJECT_ID):
-            if req == config.dev_config.GOOGLE_REDIRECT_URI:
+            # if req == config.dev_config.GOOGLE_REDIRECT_URI:
+            if req:
                 return req
 
         #Bookkeeping value; returned unchanged w/ redirect URI
