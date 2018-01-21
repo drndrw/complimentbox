@@ -1,6 +1,7 @@
 from flask import request
-from v1 import db, models
+from v1 import db, models, app
 import secrets
+from functools import wraps
 
 #Decorator will add arg to missing_args if conditions aren't met
 class append_missing():
@@ -15,6 +16,18 @@ class append_missing():
             else:
                 self.missing_args.append(f.__name__)
         return wrapper
+
+#Decorator for oauth required resources
+class oauth():
+    def __init__(self, header_prefix='Bearer'):
+        self.header_prefix = header_prefix
+
+    def oauth_required(self, f):
+        @wraps(f)
+        def decorated_function(*args, **kwargs):
+            print(request.headers)
+            return f(*args, **kwargs)
+        return decorated_function
 
 #Authenticate user and generate access token
 class authorize_user_token():
