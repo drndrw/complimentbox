@@ -45,7 +45,7 @@ def implicit_auth():
             if req:
                 return req
             else:
-                return None
+                return 'sample'
 
         #Response type should be 'token'
         @missing.confirm()
