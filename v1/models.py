@@ -57,7 +57,8 @@ class Authorization(db.Model):
 
     def __init__(self, access_token, user_id, client_id, id=None, time=datetime.datetime.now().time(), date=datetime.datetime.now().date(), grant_access=True):
         self.id = id
-        self.access_token = bcrypt.generate_password_hash(access_token)
+        # self.access_token = bcrypt.generate_password_hash(access_token)
+        self.access_token = access_token
         self.user_id = user_id
         self.client_id = client_id
         self.grant_access = grant_access
