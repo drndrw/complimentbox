@@ -30,7 +30,7 @@ oauth2 = classes.oauth()
 @oauth2.oauth_required
 def test_this():
     # print(request.headers.get('Authorization'))
-    return jsonify({'ok': 'cool'})
+    return jsonify({'ok': 'cool','user':oauth2.user_id})
 
 #Creates authorization endpoint at /v1/user/auth
 def authenticate(username, password):
