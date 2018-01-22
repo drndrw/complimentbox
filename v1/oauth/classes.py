@@ -1,5 +1,5 @@
-from flask import request
-from v1 import db, models, app
+from flask import request, jsonify
+from v1 import db, models, app, bcrypt
 import secrets
 from functools import wraps
 
@@ -21,12 +21,23 @@ class append_missing():
 class oauth():
     def __init__(self, header_prefix='Bearer'):
         self.header_prefix = header_prefix
+        self.user_id = None
 
     def oauth_required(self, f):
         @wraps(f)
         def decorated_function(*args, **kwargs):
-            print(request.headers)
-            return f(*args, **kwargs)
+            auth_header = request.headers.get('Authorization')
+            print(auth_header)
+            if auth_header:
+                auth_token = auth_header.split('{} '.format(self.header_prefix))[1]
+                token_check = models.Authorization.validate_token(auth_token)
+                if token_check['status']:
+                    print('Auth headers exist')
+                    self.user_id = token_check['user_id']
+                    return f(*args, **kwargs)
+                return jsonify({'error':'Invalid authorization token.'})
+            else:
+                return jsonify({'error':'Missing authorization token.'})
         return decorated_function
 
 #Authenticate user and generate access token
