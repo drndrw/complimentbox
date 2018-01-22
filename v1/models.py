@@ -65,6 +65,17 @@ class Authorization(db.Model):
         self.time_created = time
         self.date_created = date
 
+    @staticmethod
+    def validate_token(token):
+        try:
+            authuser = Authorization.query.filter_by(access_token=token).first()
+            if authuser:
+                return {'status': True, 'user_id': authuser.user_id}
+            else:
+                return {'status': False, 'error': 'Invalid token'}
+        except:
+            return {'status': False, 'error': 'Error occured while validating token'}
+
 class Messages(db.Model):
     __tablename__ = 'messages'
 
