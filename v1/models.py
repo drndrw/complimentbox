@@ -87,10 +87,10 @@ class Messages(db.Model):
     date_created = db.Column(db.Date, nullable=False)
     messages_messagesrecipients = db.relationship('MessagesRecipients')
 
-    def __init__(self, sender, title, body, id=None, time=datetime.datetime.now().time(), date=datetime.datetime.now().date()):
+    def __init__(self, sender, message_type, message, id=None, time=datetime.datetime.now().time(), date=datetime.datetime.now().date()):
         self.sender = sender
-        self.title = title
-        self.body = body
+        self.message_type = message_type
+        self.message = message
         self.id = id
         self.time_created = time
         self.date_created = date
