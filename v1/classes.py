@@ -17,6 +17,9 @@ class Messages_query():
             messages_return.append({'message_id': message[1], 'sender': message[2], 'read': message[3], 'message': message[4]})
         return messages_return
 
+    def get_individual_message(self):
+        pass
+
     def post_messages(self, message_type, message_recipients, message):
         try:
             if message_type and message_recipients and message:
