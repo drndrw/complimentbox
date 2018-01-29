@@ -17,6 +17,22 @@ class Messages_query():
             messages_return.append({'message_id': message[1], 'sender': message[2], 'read': message[3], 'message': message[4]})
         return messages_return
 
+    def post_messages(self, message_type, message_recipients, message):
+        try:
+            if message_type and message_recipients and message:
+                new_message = models.Messages(self.user_id, message_type, message)
+                db.session.add(new_message)
+                db.session.commit()
+                for recipient in message_recipients:
+                    new_recipient = models.MessagesRecipients(new_message.id, recipient)
+                    db.session.add(new_recipient)
+                db.session.commit()
+                return {'status': 'Created', 'type': message_type, 'recipients': message_recipients}
+            else:
+                return {'error': 'Missing parameters'}
+        except Exception as e:
+            return {'error': str(e)}
+
     def get_users(self):
         user_return = User.query.filter(User.id==self.user_id).all()
         return user_return
