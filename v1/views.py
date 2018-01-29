@@ -1,7 +1,7 @@
 from flask import jsonify, request
 from flask_restful import Resource, Api
 from flask_jwt import JWT, jwt_required, current_identity
-from v1 import api, app, db, models
+from v1 import api, app, db, models, classes
 # from v1.oauth import auth #Google implicit Oauth2
 
 ########################
@@ -21,7 +21,6 @@ api.add_resource(DefaultPage,'/')
 
 class Users(Resource):
 
-    # @jwt_required()
     def get(self):
         users = models.User.query.all()
         if users:
@@ -60,25 +59,14 @@ class Message(Resource):
     @jwt_required()
     def get(self):
         #Return list of messages recieved for a given user
-        print (current_identity)
+        msg = classes.Messages_query(current_identity) #Create Messages_query class
+        return msg.get_messages() #Get messages for given identity
 
     @jwt_required()
     def post(self):
         data = request.get_json()
-        if data['title'] and data['body'] and data['recipients']:
-            try:
-                newmessage = models.Messages(str(current_identity), data['title'], data['body'])
-                db.session.add(newmessage)
-                db.session.commit()
-                for recipient in data['recipients']:
-                    newrecipient = models.MessagesRecipients(newmessage.id, recipient)
-                    db.session.add(newrecipient)
-                db.session.commit()
-                return {'status':'Message {} has been sent.'.format(newmessage.id)}
-            except Exception as e:
-                return {'error':'An error has occured.','info':str(e)}
-        else:
-            return {'error':'Please enter all required fields.'}
+        msg = classes.Messages_query(current_identity) #Create Messages_query class
+        return msg.post_messages(data['type'], data['recipients'], data['message'])
 
 api.add_resource(Users,'/v1/user')
 api.add_resource(UserQuery,'/v1/user/<userid>')
