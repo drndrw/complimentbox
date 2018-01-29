@@ -1,4 +1,5 @@
 import os
+from datetime import timedelta
 
 class config(object):
     SECRET_KEY = os.getenv('SECRET_KEY','samplekey')
@@ -18,6 +19,7 @@ class dev_config(config):
 
     #Flask JWT configuration
     JWT_AUTH_URL_RULE = os.getenv('JWT_AUTH_URL_RULE','/v1/user/auth') #Change default
+    JWT_EXPIRATION_DELTA = os.getenv('JWT_EXPIRATION_DELTA',timedelta(seconds=3000))
 
     #Oauth configuration
     GOOGLE_PROJECT_ID = os.getenv('GOOGLE_PROJECT_ID','000000000000')
