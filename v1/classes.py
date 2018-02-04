@@ -24,7 +24,7 @@ class Messages_query():
         return messages_return
 
     def get_individual_message(self, message_id):
-        message = Messages.query.join(MessagesRecipients, Messages.id == MessagesRecipients.message_id).join(User, Messages.sender == User.id).add_columns(Messages.id, Messages.sender, User.username, MessagesRecipients.read, Messages.message, MessagesRecipients.user_id).filter(Messages.id==message_id).first()
+        message = Messages.query.join(MessagesRecipients, Messages.id == MessagesRecipients.message_id).join(User, Messages.sender == User.id).add_columns(Messages.id, Messages.sender, User.username, MessagesRecipients.read, Messages.message, MessagesRecipients.user_id).filter(Messages.id==message_id).filter(MessagesRecipients.user_id==self.user_id).first()
         print(message)
         if message:
             if self.is_me(*[message[2], message[6]]): #Check user is recipient/ sender of message
