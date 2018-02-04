@@ -25,7 +25,6 @@ class Messages_query():
 
     def get_individual_message(self, message_id):
         message = Messages.query.join(MessagesRecipients, Messages.id == MessagesRecipients.message_id).join(User, Messages.sender == User.id).add_columns(Messages.id, Messages.sender, User.username, MessagesRecipients.read, Messages.message, MessagesRecipients.user_id).filter(Messages.id==message_id).filter(MessagesRecipients.user_id==self.user_id).first()
-        print(message)
         if message:
             if self.is_me(*[message[2], message[6]]): #Check user is recipient/ sender of message
                 return {'message_id': message[1], 'sender_id': message[2], 'sender_name': message[3], 'read': message[4], 'message': message[5]}
@@ -35,10 +34,14 @@ class Messages_query():
             return {'error': 'Message not found'}, 404
 
     def delete_individual_message(self, message_id):
-        message = Messages.query.add_columns(Messages.sender).filter(Messages.id==message_id)
-        print(message)
-        # Messages.query.filter(Messages.id==message_id).delete()
-        # db.session.commit()
+        message = Messages.query.add_columns(Messages.sender).filter(Messages.id==message_id).first()
+        if self.is_me(*[message[1]]):
+            Messages.query.filter(Messages.id==message_id).filter(Messages.sender==self.user_id).delete()
+            MessagesRecipients.query.filter(MessagesRecipients.message_id==message_id).delete()
+            db.session.commit()
+            return {'status': 'Deleted', 'message_id': message_id}
+        else:
+            return {'error': 'You do not have permission to modify this message'}, 403
 
     def post_messages(self, message_type, message_recipients, message):
         try:
