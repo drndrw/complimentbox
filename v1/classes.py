@@ -18,8 +18,14 @@ class Messages_query():
         return messages_return
 
     def get_individual_message(self, message_id):
-        message = Messages.query.join(MessagesRecipients, Messages.id == MessagesRecipients.message_id).join(User, Messages.sender == User.id).add_columns(Messages.id, Messages.sender, User.username, MessagesRecipients.read, Messages.message).filter(Messages.id==message_id).first()
-        return {'message_id': message[1], 'sender_id': message[2], 'sender_name': message[3], 'read': message[4], 'message': message[5]}
+        message = Messages.query.join(MessagesRecipients, Messages.id == MessagesRecipients.message_id).join(User, Messages.sender == User.id).add_columns(Messages.id, Messages.sender, User.username, MessagesRecipients.read, Messages.message, MessagesRecipients.user_id).filter(Messages.id==message_id).first()
+        if message:
+            if str(message[6]) == self.user_id: #Check user is recipient of message
+                return {'message_id': message[1], 'sender_id': message[2], 'sender_name': message[3], 'read': message[4], 'message': message[5]}
+            else:
+                return {'error': 'You do not have permission to view this message'}, 403
+        else:
+            return {'error': 'Message not found'}, 404
 
     def post_messages(self, message_type, message_recipients, message):
         try:
