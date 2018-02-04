@@ -68,7 +68,15 @@ class Message(Resource):
         msg = classes.Messages_query(current_identity) #Create Messages_query class
         return msg.post_messages(data['type'], data['recipients'], data['message'])
 
+class MessageQuery(Resource):
+
+    @jwt_required()
+    def get(self, messageid):
+        msg = classes.Messages_query(current_identity)
+        print(msg.get_individual_message(messageid))
+
 api.add_resource(Users,'/v1/user')
 api.add_resource(UserQuery,'/v1/user/<userid>')
 api.add_resource(Message,'/v1/messages')
+api.add_resource(MessageQuery,'/v1/messages/<messageid>')
 # api.add_resource(auth.Oauth,'/v1/oauth') #Google auth URL
