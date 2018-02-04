@@ -23,10 +23,12 @@ class Messages_query():
             messages_return.append({'message_id': message[1], 'sender_id': message[2], 'sender_name': message[3], 'read': message[4], 'message': message[5]})
         return messages_return
 
-    def get_individual_message(self, message_id):
+    def get_individual_message(self, message_id, mark_read=True):
         message = Messages.query.join(MessagesRecipients, Messages.id == MessagesRecipients.message_id).join(User, Messages.sender == User.id).add_columns(Messages.id, Messages.sender, User.username, MessagesRecipients.read, Messages.message, MessagesRecipients.user_id).filter(Messages.id==message_id).filter(MessagesRecipients.user_id==self.user_id).first()
         if message:
             if self.is_me(*[message[2], message[6]]): #Check user is recipient/ sender of message
+                if mark_read: #Mark message as read if True
+                    pass
                 return {'message_id': message[1], 'sender_id': message[2], 'sender_name': message[3], 'read': message[4], 'message': message[5]}
             else:
                 return {'error': 'You do not have permission to view this message'}, 403
