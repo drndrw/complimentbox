@@ -19,7 +19,7 @@ class Messages_query():
 
     def get_individual_message(self, message_id):
         message = Messages.query.join(MessagesRecipients, Messages.id == MessagesRecipients.message_id).join(User, Messages.sender == User.id).add_columns(Messages.id, Messages.sender, User.username, MessagesRecipients.read, Messages.message).filter(Messages.id==message_id).first()
-        return message
+        return {'message_id': message[1], 'sender_id': message[2], 'sender_name': message[3], 'read': message[4], 'message': message[5]}
 
     def post_messages(self, message_type, message_recipients, message):
         try:
