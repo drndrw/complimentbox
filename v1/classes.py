@@ -10,6 +10,11 @@ class Messages_query():
     def __init__(self, user_id):
         self.user_id = str(user_id)
 
+    #Verify message owner is same as current user
+    def is_me(self, message_user):
+        if self.user_id == str(message_user):
+            return True
+
     def get_messages(self):
         messages = Messages.query.join(MessagesRecipients, Messages.id == MessagesRecipients.message_id).join(User, Messages.sender == User.id).add_columns(Messages.id, Messages.sender, User.username, MessagesRecipients.read, Messages.message).filter(MessagesRecipients.user_id==self.user_id).all()
         messages_return = []
@@ -20,12 +25,18 @@ class Messages_query():
     def get_individual_message(self, message_id):
         message = Messages.query.join(MessagesRecipients, Messages.id == MessagesRecipients.message_id).join(User, Messages.sender == User.id).add_columns(Messages.id, Messages.sender, User.username, MessagesRecipients.read, Messages.message, MessagesRecipients.user_id).filter(Messages.id==message_id).first()
         if message:
-            if str(message[6]) == self.user_id: #Check user is recipient of message
+            if self.is_me(message[6]): #Check user is recipient of message
                 return {'message_id': message[1], 'sender_id': message[2], 'sender_name': message[3], 'read': message[4], 'message': message[5]}
             else:
                 return {'error': 'You do not have permission to view this message'}, 403
         else:
             return {'error': 'Message not found'}, 404
+
+    def delete_individual_message(self, message_id):
+        message = Messages.query.add_columns(Messages.sender).filter(Messages.id==message_id)
+        print(message)
+        Messages.query.filter(Messages.id==message_id).delete()
+        db.session.commit()
 
     def post_messages(self, message_type, message_recipients, message):
         try:
