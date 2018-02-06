@@ -28,7 +28,10 @@ class Messages_query():
         if message:
             if self.is_me(*[message[2], message[6]]): #Check user is recipient/ sender of message
                 if mark_read: #Mark message as read if True
-                    pass
+                    if not message.read:
+                        print(message.read)
+                        MessagesRecipients.query.filter(MessagesRecipients.message_id==message_id).filter(MessagesRecipients.user_id==self.user_id).update({'read': True})
+                        db.session.commit()
                 return {'message_id': message[1], 'sender_id': message[2], 'sender_name': message[3], 'read': message[4], 'message': message[5]}
             else:
                 return {'error': 'You do not have permission to view this message'}, 403
@@ -54,6 +57,8 @@ class Messages_query():
                 for recipient in message_recipients:
                     new_recipient = models.MessagesRecipients(new_message.id, recipient)
                     db.session.add(new_recipient)
+                new_recipient_me = models.MessagesRecipients(new_message.id, self.user_id) #Add sender as recipient
+                db.session.add(new_recipient_me)
                 db.session.commit()
                 return {'status': 'Created', 'type': message_type, 'recipients': message_recipients}
             else:
