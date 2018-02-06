@@ -1,8 +1,8 @@
 from flask import jsonify, request
 from flask_restful import Resource, Api
 from flask_jwt import JWT, jwt_required, current_identity
-from v1 import api, app, db, models, classes
-# from v1.oauth import auth #Google implicit Oauth2
+from v1 import api, app, db, models, classes, oauth2
+# from v1.oauth.classes import oauth #Google implicit Oauth2
 
 ########################
 ##### LANDING PAGE #####
@@ -80,7 +80,14 @@ class MessageQuery(Resource):
         msg = classes.Messages_query(current_identity)
         return msg.delete_individual_message(messageid)
 
+class Google(Resource):
+
+    @oauth2.oauth_required
+    def post(self):
+        return {'test':'hey {}'.format(oauth2.user_id)}
+
 api.add_resource(Users,'/v1/user')
 api.add_resource(UserQuery,'/v1/user/<userid>')
 api.add_resource(Message,'/v1/messages')
 api.add_resource(MessageQuery,'/v1/messages/<messageid>')
+api.add_resource(Google,'/v1/google')
