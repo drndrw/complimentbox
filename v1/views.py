@@ -92,7 +92,7 @@ class Google(Resource):
     def post(self):
         user = oauth.get_id()
         data = request.get_json()
-        if data['result']['action'] == 'input.welcome'
+        if data['result']['action'] == 'input.welcome':
             if user:
                 return {'messages': [{'speech': 'Welcome to Compliment Box, {}!'.format(str(user)), 'type':0}, \
                                     {'speech': 'Hey, {}!'.format(str(user)), 'type':0}]}
