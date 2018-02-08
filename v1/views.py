@@ -1,8 +1,7 @@
 from flask import jsonify, request
 from flask_restful import Resource, Api
 from flask_jwt import JWT, jwt_required, current_identity
-from v1.oauth.classes import sample, oauth
-import v1
+from v1.oauth.classes import oauth
 from v1 import api, app, db, models, classes
 # from v1.oauth.classes import oauth #Google implicit Oauth2
 
