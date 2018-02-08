@@ -73,8 +73,8 @@ class Authorization(db.Model):
                 return {'status': True, 'user_id': authuser.user_id}
             else:
                 return {'status': False, 'error': 'Invalid token'}
-        except:
-            return {'status': False, 'error': 'Error occured while validating token'}
+        except Exception as e:
+            return {'status': False, 'error': 'Error occured while validating token', 'detail': str(e)}
 
 class Messages(db.Model):
     __tablename__ = 'messages'
