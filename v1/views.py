@@ -1,7 +1,9 @@
 from flask import jsonify, request
 from flask_restful import Resource, Api
 from flask_jwt import JWT, jwt_required, current_identity
-from v1 import api, app, db, models, classes, oauth2
+from v1.oauth.classes import sample, oauth
+import v1
+from v1 import api, app, db, models, classes
 # from v1.oauth.classes import oauth #Google implicit Oauth2
 
 ########################
@@ -11,6 +13,8 @@ from v1 import api, app, db, models, classes, oauth2
 class DefaultPage(Resource):
 
     def get(self):
+        print(v1.testyThis.check)
+        print(v1.oauth2.user_id)
         return {'v1.0':'https://api.complimentbox.com/v1'}
 
 api.add_resource(DefaultPage,'/')
@@ -82,9 +86,14 @@ class MessageQuery(Resource):
 
 class Google(Resource):
 
-    @oauth2.oauth_required
+    @oauth.oauth_required
+    # @oauth_required
+    def get(self):
+        return {'test':'success!', 'id': oauth.get_id()}
+
     def post(self):
-        return {'test':'hey {}'.format(oauth2.user_id)}
+        pass
+        # return {'test':'hey {}'.format(oauth2.user_id)}
 
 api.add_resource(Users,'/v1/user')
 api.add_resource(UserQuery,'/v1/user/<userid>')
