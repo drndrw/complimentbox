@@ -89,7 +89,8 @@ class Google(Resource):
         return {'test':'success!', 'id': oauth.get_id()}
 
     def post(self):
-        pass
+        data = request.get_json()
+        return {'messages': [{'speech': 'Welcome to Compliment Box!', 'type':0}]}
         # return {'test':'hey {}'.format(oauth2.user_id)}
 
 api.add_resource(Users,'/v1/user')
