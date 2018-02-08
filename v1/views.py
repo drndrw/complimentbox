@@ -88,9 +88,16 @@ class Google(Resource):
     def get(self):
         return {'test':'success!', 'id': oauth.get_id()}
 
+    @oauth.oauth_required
     def post(self):
+        user = oauth.get_id()
         data = request.get_json()
-        return {'messages': [{'speech': 'Welcome to Compliment Box!', 'type':0}]}
+        if user:
+            return {'messages': [{'speech': 'Welcome to Compliment Box, {}!'.format(str(user)), 'type':0}, \
+                                {'speech': 'Hey, {}!'.format(str(user)), 'type':0}]}
+        else:
+            return {'messages': [{'speech': 'Welcome to Compliment Box!', 'type':0}, \
+                                {'speech': 'Hey there! Thanks for checking out Compliment Box. Please login by going to complimentbox.com.', 'type':0}]}
         # return {'test':'hey {}'.format(oauth2.user_id)}
 
 api.add_resource(Users,'/v1/user')
