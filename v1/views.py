@@ -12,8 +12,6 @@ from v1 import api, app, db, models, classes
 class DefaultPage(Resource):
 
     def get(self):
-        print(v1.testyThis.check)
-        print(v1.oauth2.user_id)
         return {'v1.0':'https://api.complimentbox.com/v1'}
 
 api.add_resource(DefaultPage,'/')
