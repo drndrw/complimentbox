@@ -18,19 +18,18 @@ from flask.ext.bcrypt import Bcrypt
 bcrypt = Bcrypt(app)
 
 from v1 import views, models
-from v1.oauth import auth, classes
 
 #JWT SETTINGS
 from flask_jwt import JWT, jwt_required, current_identity
 
 #OAUTH SETTINGS
-oauth2 = classes.oauth()
 
 @app.route('/v2')
-@oauth2.oauth_required
+# @oauth2.oauth_required
 def test_this():
     # print(request.headers.get('Authorization'))
-    return jsonify({'ok': 'cool','user':oauth2.user_id})
+    pass
+    # return jsonify({'ok': 'cool','user':oauth2.user_id})
 
 #Creates authorization endpoint at /v1/user/auth
 def authenticate(username, password):
