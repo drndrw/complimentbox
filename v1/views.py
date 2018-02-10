@@ -88,17 +88,16 @@ class Google(Resource):
     def get(self):
         return {'test':'success!', 'id': oauth.get_id()}
 
-    @oauth.oauth_required
+    # @oauth.oauth_required
     def post(self):
         user = oauth.get_id()
         data = request.get_json()
+        print(data)
         if data['result']['action'] == 'input.welcome':
             if user:
-                return {'messages': [{'speech': 'Welcome to Compliment Box, {}!'.format(str(user)), 'type':0}, \
-                                    {'speech': 'Hey, {}!'.format(str(user)), 'type':0}]}
+                return {'messages': [{'speech': 'Welcome to Compliment Box, {}!'.format(str(user)), 'type':0}]}
             else:
-                return {'messages': [{'speech': 'Welcome to Compliment Box!', 'type':0}, \
-                                    {'speech': 'Hey there! Thanks for checking out Compliment Box. Please login by going to complimentbox.com.', 'type':0}]}
+                return {'messages': [{'speech': 'Hey there! Thanks for checking out Compliment Box. Please login by going to complimentbox.com.', 'type':0}]}
             # return {'test':'hey {}'.format(oauth2.user_id)}
         elif data['result']['action'] == 'input.read_messages':
             return {'messages': [{'speech': 'Here are your messages, {}!'.format(str(user)), 'type':0}]}
