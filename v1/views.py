@@ -3,6 +3,8 @@ from flask_restful import Resource, Api
 from flask_jwt import JWT, jwt_required, current_identity
 from v1.oauth.classes import oauth
 from v1 import api, app, db, models, classes
+import json
+import os
 # from v1.oauth.classes import oauth #Google implicit Oauth2
 
 ########################
@@ -88,21 +90,31 @@ class Google(Resource):
     def get(self):
         return {'test':'success!', 'id': oauth.get_id()}
 
-    # @oauth.oauth_required
+    @oauth.oauth_required
     def post(self):
         user = oauth.get_id()
         data = request.get_json()
-        print(data)
         if data['result']['action'] == 'input.welcome':
+            msg = classes.Messages_query(user)
             if user:
-                return {'messages': [{'speech': 'Welcome to Compliment Box, {}!'.format(str(user)), 'type':0}]}
+                # return {'messages': {'speech': 'Welcome to Compliment Box, {}!'.format(str(user)), 'type':0}]}
+                return {'speech': 'Welcome to Compliment Box, {}! What would you like to do?'.format(msg.username) ,'displayText': 'Welcome to Compliment Box, {}!'.format(msg.username)}
             else:
+                # return {'speech': 'Hey there! Thanks for checking out Compliment Box. Please login by going to complimentbox.com.', 'displayText': 'Hey there! Thanks for checking out Compliment Box. Please login by going to complimentbox.com.'}
                 return {'messages': [{'speech': 'Hey there! Thanks for checking out Compliment Box. Please login by going to complimentbox.com.', 'type':0}]}
             # return {'test':'hey {}'.format(oauth2.user_id)}
+        elif data['result']['action'] == 'input.deletemessages':
+            print(data)
+            print('\n---------------\n')
+            with open('v1/google_json/greeting.json', 'r') as jsontest:
+                    payload = json.load(jsontest)
+                    return {'speech':'Please just work','displayText':'try working???'}
         elif data['result']['action'] == 'input.read_messages':
             return {'messages': [{'speech': 'Here are your messages, {}!'.format(str(user)), 'type':0}]}
         else:
-            return {'messages': [{'speech': 'Cool!', 'type':0}]}
+            msg = classes.Messages_query(user)
+            print(str(msg.username))
+            return {'messages': [{'speech': 'Try saying something else {}.'.format(msg.username), 'type':0}]}
 
 api.add_resource(Users,'/v1/user')
 api.add_resource(UserQuery,'/v1/user/<userid>')
