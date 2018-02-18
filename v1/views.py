@@ -86,7 +86,6 @@ class MessageQuery(Resource):
 class Google(Resource):
 
     @oauth.oauth_required
-    # @oauth_required
     def get(self):
         return {'test':'success!', 'id': oauth.get_id()}
 
@@ -94,15 +93,14 @@ class Google(Resource):
     def post(self):
         user = oauth.get_id()
         data = request.get_json()
+        msg = classes.Messages_query(user)
+
+        #WELCOME INTENT
         if data['result']['action'] == 'input.welcome':
-            msg = classes.Messages_query(user)
             if user:
-                # return {'messages': {'speech': 'Welcome to Compliment Box, {}!'.format(str(user)), 'type':0}]}
-                return {'speech': 'Welcome to Compliment Box, {}! What would you like to do?'.format(msg.username) ,'displayText': 'Welcome to Compliment Box, {}!'.format(msg.username)}
+                return {'speech': 'Welcome to Compliment Box, {}! What would you like to do?'.format(msg.username) ,'displayText': 'Welcome to Compliment Box, {}! What would you like to do?'.format(msg.username)}
             else:
-                # return {'speech': 'Hey there! Thanks for checking out Compliment Box. Please login by going to complimentbox.com.', 'displayText': 'Hey there! Thanks for checking out Compliment Box. Please login by going to complimentbox.com.'}
-                return {'messages': [{'speech': 'Hey there! Thanks for checking out Compliment Box. Please login by going to complimentbox.com.', 'type':0}]}
-            # return {'test':'hey {}'.format(oauth2.user_id)}
+                return {'speech': 'Hey there! Thanks for checking out Compliment Box. Please login by going to complimentbox.com.', 'displayText': 'Thank you for checking out Compliment Box! Please visit complimentbox.com to create an account.', 'data':{'google':{'expect_user_response': False}}}
         elif data['result']['action'] == 'input.deletemessages':
             print(data)
             print('\n---------------\n')
@@ -110,9 +108,9 @@ class Google(Resource):
                     payload = json.load(jsontest)
                     return {'speech':'Please just work','displayText':'try working???'}
         elif data['result']['action'] == 'input.read_messages':
-            return {'messages': [{'speech': 'Here are your messages, {}!'.format(str(user)), 'type':0}]}
+            return {'speech': 'Here are your messages, {}! What would you like to do?'.format(msg.username) ,'displayText': 'Here are your messages, {}!'.format(msg.username)}
         else:
-            msg = classes.Messages_query(user)
+            # msg = classes.Messages_query(user)
             print(str(msg.username))
             return {'messages': [{'speech': 'Try saying something else {}.'.format(msg.username), 'type':0}]}
 
