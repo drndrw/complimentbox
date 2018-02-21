@@ -16,7 +16,16 @@ class DefaultPage(Resource):
     def get(self):
         return {'v1.0':'https://api.complimentbox.com/v1'}
 
+class V1Page(Resource):
+
+    def get(self):
+        return {'Users':'https://api.complimentbox.com/v1/user',
+                'Individual user':'https://api.complimentbox.com/v1/user/<id>',
+                'Messages':'https://api.complimentbox.com/v1/messages',
+                'Individual message':'https://api.complimentbox.com/v1/messages/<id>',}
+
 api.add_resource(DefaultPage,'/')
+api.add_resource(V1Page,'/v1')
 
 #########################
 ##### API VERSION 1 #####
@@ -95,24 +104,24 @@ class Google(Resource):
         data = request.get_json()
         msg = classes.Messages_query(user)
 
-        #WELCOME INTENT
+        #WELCOME
         if data['result']['action'] == 'input.welcome':
             if user:
                 return {'speech': 'Welcome to Compliment Box, {}! What would you like to do?'.format(msg.username) ,'displayText': 'Welcome to Compliment Box, {}! What would you like to do?'.format(msg.username)}
             else:
                 return {'speech': 'Hey there! Thanks for checking out Compliment Box. Please login by going to complimentbox.com.', 'displayText': 'Thank you for checking out Compliment Box! Please visit complimentbox.com to create an account.', 'data':{'google':{'expect_user_response': False}}}
-        elif data['result']['action'] == 'input.deletemessages':
-            print(data)
-            print('\n---------------\n')
-            with open('v1/google_json/greeting.json', 'r') as jsontest:
-                    payload = json.load(jsontest)
-                    return {'speech':'Please just work','displayText':'try working???'}
+
+        #READ MESSAGES
         elif data['result']['action'] == 'input.read_messages':
             return {'speech': 'Here are your messages, {}! What would you like to do?'.format(msg.username) ,'displayText': 'Here are your messages, {}!'.format(msg.username)}
+
+        #END CONVERSATION
+        elif data['result']['action'] == 'input.end':
+            return {'speech': 'Goodbye!', 'displayText': 'Goodbye, {}!'.format(msg.username), 'data':{'google':{'expect_user_response': False}}}
+
+        #FALLBACK
         else:
-            # msg = classes.Messages_query(user)
-            print(str(msg.username))
-            return {'messages': [{'speech': 'Try saying something else {}.'.format(msg.username), 'type':0}]}
+            return {'speech': 'Sorry, I didn\'t get that {}'.format(msg.username) ,'displayText': 'Sorry, I didn\'t get that {}'.format(msg.username)}
 
 api.add_resource(Users,'/v1/user')
 api.add_resource(UserQuery,'/v1/user/<userid>')
