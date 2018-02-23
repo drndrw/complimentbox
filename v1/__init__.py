@@ -24,6 +24,7 @@ from flask_jwt import JWT, jwt_required, current_identity
 
 #OAUTH SETTINGS
 
+from v1.oauth import auth, classes
 @app.route('/v2')
 # @oauth2.oauth_required
 def test_this():
