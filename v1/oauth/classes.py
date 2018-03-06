@@ -51,6 +51,7 @@ class oauth(object):
             print(auth_header)
             if auth_header:
                 # auth_token = auth_header.split('{} '.format(self.header_prefix))[1]
+                print('liked auth header')
                 auth_token = auth_header.split('{} '.format(header_prefix))[1]
                 print("'" + auth_token + "'")
                 print(type(auth_token))
@@ -62,6 +63,7 @@ class oauth(object):
                 print(token_check['detail'])
                 return jsonify({'error':'Invalid authorization token.'})
             else:
+                print('bad auth header')
                 return jsonify({'error':'Missing authorization token.'})
         return decorated_function
 
@@ -83,6 +85,7 @@ class authorize_user_token():
 
     def __init__(self, username, password):
         self.user = models.User.validate(username, password)
+        self.username = User.query.filter(User.username==username)
 
     #Generates auth token for user. Takes client_id as only parameter (eg. google)
     def create_token(self, client_id):
