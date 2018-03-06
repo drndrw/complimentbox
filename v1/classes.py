@@ -9,6 +9,7 @@ class Messages_query():
 
     def __init__(self, user_id):
         self.user_id = str(user_id)
+        self.username = User.query.add_columns(User.username).filter(User.id==user_id).first()[1]
 
     #Verify message owner/ recipient is same as current user
     def is_me(self, *args):
