@@ -92,39 +92,38 @@ class MessageQuery(Resource):
         msg = classes.Messages_query(current_identity)
         return msg.delete_individual_message(messageid)
 
-class Google(Resource):
-
-    @oauth.oauth_required
-    def get(self):
-        return {'test':'success!', 'id': oauth.get_id()}
-
-    @oauth.oauth_required
-    def post(self):
-        user = oauth.get_id()
-        data = request.get_json()
-        msg = classes.Messages_query(user)
-
-        #WELCOME
-        if data['result']['action'] == 'input.welcome':
-            if user:
-                return {'speech': 'Welcome to Compliment Box, {}! What would you like to do?'.format(msg.username) ,'displayText': 'Welcome to Compliment Box, {}! What would you like to do?'.format(msg.username)}
-            else:
-                return {'speech': 'Hey there! Thanks for checking out Compliment Box. Please login by going to complimentbox.com.', 'displayText': 'Thank you for checking out Compliment Box! Please visit complimentbox.com to create an account.', 'data':{'google':{'expect_user_response': False}}}
-
-        #READ MESSAGES
-        elif data['result']['action'] == 'input.read_messages':
-            return {'speech': 'Here are your messages, {}! What would you like to do?'.format(msg.username) ,'displayText': 'Here are your messages, {}!'.format(msg.username)}
-
-        #END CONVERSATION
-        elif data['result']['action'] == 'input.end':
-            return {'speech': 'Goodbye!', 'displayText': 'Goodbye, {}!'.format(msg.username), 'data':{'google':{'expect_user_response': False}}}
-
-        #FALLBACK
-        else:
-            return {'speech': 'Sorry, I didn\'t get that {}'.format(msg.username) ,'displayText': 'Sorry, I didn\'t get that {}'.format(msg.username)}
+# class Google(Resource):
+#
+#     @oauth.oauth_required
+#     def get(self):
+#         return {'test':'success!', 'id': oauth.get_id()}
+#
+#     @oauth.oauth_required
+#     def post(self):
+#         user = oauth.get_id()
+#         data = request.get_json()
+#         msg = classes.Messages_query(user)
+#
+#         #WELCOME
+#         if data['result']['action'] == 'input.welcome':
+#             if user:
+#                 return {'speech': 'Welcome to Compliment Box, {}! What would you like to do?'.format(msg.username) ,'displayText': 'Welcome to Compliment Box, {}! What would you like to do?'.format(msg.username)}
+#             else:
+#                 return {'speech': 'Hey there! Thanks for checking out Compliment Box. Please login by going to complimentbox.com.', 'displayText': 'Thank you for checking out Compliment Box! Please visit complimentbox.com to create an account.', 'data':{'google':{'expect_user_response': False}}}
+#
+#         #READ MESSAGES
+#         elif data['result']['action'] == 'input.read_messages':
+#             return {'speech': 'Here are your messages, {}! What would you like to do?'.format(msg.username) ,'displayText': 'Here are your messages, {}!'.format(msg.username)}
+#         #END CONVERSATION
+#         elif data['result']['action'] == 'input.end':
+#             return {'speech': 'Goodbye!', 'displayText': 'Goodbye, {}!'.format(msg.username), 'data':{'google':{'expect_user_response': False}}}
+#
+#         #FALLBACK
+#         else:
+#             return {'speech': 'Sorry, I didn\'t get that {}'.format(msg.username) ,'displayText': 'Sorry, I didn\'t get that {}'.format(msg.username)}
 
 api.add_resource(Users,'/v1/user')
 api.add_resource(UserQuery,'/v1/user/<userid>')
 api.add_resource(Message,'/v1/messages')
 api.add_resource(MessageQuery,'/v1/messages/<messageid>')
-api.add_resource(Google,'/v1/google')
+# api.add_resource(Google,'/v1/google')
