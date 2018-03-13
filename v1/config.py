@@ -24,3 +24,6 @@ class dev_config(config):
     #Oauth configuration
     GOOGLE_PROJECT_ID = os.getenv('GOOGLE_PROJECT_ID','000000000000')
     GOOGLE_REDIRECT_URI = os.getenv('GOOGLE_REDIRECT_URI','https://oauth-redirect.googleusercontent.com/r/')
+
+    #Assistant configuration
+    ASSIST_ACTIONS_ON_GOOGLE = os.getenv('ASSIST_ACTIONS_ON_GOOGLE',True)
