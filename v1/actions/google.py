@@ -40,6 +40,9 @@ def read_msg():
         resp = ask("You have no messages. What would you like to do now?")
     return resp
 
+@assist.action('Write messages')
+def write_msg():
+
 @assist.action('End conversation')
 def end_convo():
     # speech = "Welcome to Compliment box!"
