@@ -24,8 +24,13 @@ class Messages_query():
             messages_return.append({'message_id': message[1], 'sender_id': message[2], 'sender_name': message[3], 'read': message[4], 'message': message[5]})
         return messages_return
 
-    def get_latest_message_id(self):
-        latest_id = #Latest unread message ID for specified user
+    def get_latest_message_id(self, get_second_id=True):
+        try:
+            latest_id = MessagesRecipients.query.filter_by(user_id=self.user_id, read=False).limit(2).all()
+        except:
+            latest_id = MessagesRecipients.query.filter_by(user_id=self.user_id, read=False).first()
+        # latest_id = #Latest unread message ID for specified user
+        return latest_id
 
     def get_individual_message(self, message_id, mark_read=True):
         message = Messages.query.join(MessagesRecipients, Messages.id == MessagesRecipients.message_id).join(User, Messages.sender == User.id).add_columns(Messages.id, Messages.sender, User.username, MessagesRecipients.read, Messages.message, MessagesRecipients.user_id).filter(Messages.id==message_id).filter(MessagesRecipients.user_id==self.user_id).first()
@@ -36,7 +41,7 @@ class Messages_query():
                         print(message.read)
                         MessagesRecipients.query.filter(MessagesRecipients.message_id==message_id).filter(MessagesRecipients.user_id==self.user_id).update({'read': True})
                         db.session.commit()
-                return {'message_id': message[1], 'sender_id': message[2], 'sender_name': message[3], 'read': message[4], 'message': message[5]}
+                return {'message_id': message[1], 'sender_id': message[2], 'sender_name': message[3], 'read': message[4], 'message': message[5]}, 200
             else:
                 return {'error': 'You do not have permission to view this message'}, 403
         else:
