@@ -41,7 +41,13 @@ def read_msg():
     return resp
 
 @assist.action('Write messages')
-def write_msg():
+def write_msg(username):
+    print(username)
+    # print(message)
+    user = oauth.get_id()
+    print('at write message')
+    resp = ask("Write messages")
+    return resp
 
 @assist.action('End conversation')
 def end_convo():
